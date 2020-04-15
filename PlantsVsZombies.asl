@@ -1,7 +1,7 @@
 // For Steam version users, you have to open PVZ before LiveSplit.
 // If you run LiveSplit first this script won't work due to the stupid Steam logic.
 
-// Timer shuold start at -6.00 seconds to get the correct time.
+// Timer should start at -6.00 seconds to get the correct time.
 // Timer should start at -8.80 seconds in NG+, specifically.
 
 state("popcapgame1"){            // Steam version's main process
@@ -49,7 +49,7 @@ start{
 		}
 		else if (current.levelID == 51){
 			if (current.gamestate == 3){
-			// All Puzzles, must start with Vasebreaker
+			// All Puzzles, starts with Vasebreaker
 				vars.category = 12;
 				return true;
 			}
@@ -73,9 +73,5 @@ start{
 }
 
 split{
-	if (vars.category <= 9 && current.level != old.level)
-		return true;
-	else if (vars.category >= 10 && current.gamestate == 7 && old.gamestate == 3){
-		return true;
-	}
+	return (vars.category <= 9 && current.level != old.level)||(vars.category >= 10 && current.gamestate == 7 && old.gamestate == 3);
 }
