@@ -1,7 +1,7 @@
 // For Steam version users, you have to open PVZ before LiveSplit.
 // If you run LiveSplit first this script won't work due to the stupid Steam logic.
 
-// Timer shuold start at -6.00 seconds to return the correct time.
+// Timer shuold start at -6.00 seconds to get the correct time.
 // Timer should start at -8.80 seconds in NG+, specifically.
 
 state("popcapgame1"){            // Steam version's main process
