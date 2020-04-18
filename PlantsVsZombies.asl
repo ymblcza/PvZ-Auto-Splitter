@@ -73,5 +73,5 @@ start{
 }
 
 split{
-	return (vars.category <= 9 && current.level != old.level)||(vars.category >= 10 && current.gamestate == 7 && old.gamestate == 3);
+		return (current.gamestate == 5 || current.gamestate == 7) && old.gamestate == 3;
 }
