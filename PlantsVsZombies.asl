@@ -73,5 +73,6 @@ start{
 }
 
 split{
-		return (current.gamestate == 5 || current.gamestate == 7) && old.gamestate == 3;
+		//return (current.gamestate == 5 || current.gamestate == 7) && old.gamestate == 3;
+		return false;
 }
