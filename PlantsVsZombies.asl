@@ -20,14 +20,10 @@ state("PlantsVsZombies"){         // Original version's main process
 	int sun: 0x2a9ec0, 0x768, 0x5560;
 }
 
-init{
-	vars.category = -1;
-}
-
 start{
 	if (current.timesadventurecompleted == 0){
 		if (current.levelID == 0 && current.level == 1 && current.gamestate == 3 && current.sun == 50){
-		// Any%
+		// Any% or 100%
 			//print("timescompleted "+current.timesadventurecompleted.ToString());
 			//print("levelID "+current.levelID.ToString());
 			//print("sun "+current.sun.ToString());
@@ -35,36 +31,31 @@ start{
 			//print("state "+current.gamestate.ToString());
 			//print(modules.First().BaseAddress.ToString());
 			//print(modules.First().ModuleMemorySize.ToString());
-			vars.category = 1;
 			return true;
 		}
 	}
 	else{
-		if (current.levelID == 18){
+		if (current.levelID == 18 or current.levelID == 16){
 			if (current.gamestate == 2 && current.sun == 50){
-			// All Mini-games, should start with Slot Machine
-				vars.category = 11;
+			// All Mini-games, should start with Slot Machine or Zombotany
 				return true;
 			}
 		}
 		else if (current.levelID == 51){
 			if (current.gamestate == 3){
 			// All Puzzles, starts with Vasebreaker
-				vars.category = 12;
 				return true;
 			}
 		}
 		else if (current.levelID >= 1 && current.levelID <= 10){
 			if (current.gamestate == 2){
-			// All Survivals and Normal Survivals
-				vars.category = 13;
+			// All Survivals or Normal Survivals
 				return true;
 			}
 		}
 		else if (current.levelID == 0){
 			if (current.level == 1 && current.gamestate == 2){
 			// NG+
-				vars.category = 2;
 				return true;
 			}
 		}
@@ -73,6 +64,5 @@ start{
 }
 
 split{
-		//return (current.gamestate == 5 || current.gamestate == 7) && old.gamestate == 3;
-		return false;
+		return current.level != old.level || (current.gamestate == 5 || current.gamestate == 7) && old.gamestate == 3;
 }
