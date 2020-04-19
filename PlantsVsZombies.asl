@@ -35,7 +35,7 @@ start{
 			return true;
 		}
 	}
-	else if (current.gametime >=1 && current.gametime <= 4){
+	else if (current.gametime >=1 && current.gametime <= 20){
 		if (vars.startlevels.IndexOf(current.levelID, 1) != -1){
 			return true;
 		}
