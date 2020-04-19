@@ -24,7 +24,7 @@ state("PlantsVsZombies"){                    // main process of original version
 }
 
 init{
-	int[] startlevels = {1,2,3,4,5,6,7,8,9,10,16,18,51,60,70,13};
+	vars.startlevels = new List<int>{1,2,3,4,5,6,7,8,9,10,16,18,51,60,70,13};
 	// 1,2,...,10 = Normal / All Survivals;   16,18 = All minigames;   51 = All puzzles;   60 / 70 / 13 = Vasebreaker / I, Zombie / Survival Endless
 }
 
@@ -36,11 +36,13 @@ start{
 		}
 	}
 	else if (current.gametime >=1 && current.gametime <= 4){
-		if (vars.startlevels.IndexOf(current.levelID,1)!=-1)
+		if (vars.startlevels.IndexOf(current.levelID, 1) != -1){
 			return true;
-		else if (current.levelID == 0 && current.level == 1)
+		}
+		else if (current.levelID == 0 && current.level == 1){
 		// NG+
 			return true;
+		}
 	}
 }
 
