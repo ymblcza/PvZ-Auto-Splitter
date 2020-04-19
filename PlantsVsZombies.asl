@@ -36,7 +36,7 @@ start{
 		}
 	}
 	else{
-		if (current.levelID == 18 or current.levelID == 16){
+		if (current.levelID == 18 || current.levelID == 16){
 			if (current.gamestate == 2 && current.sun == 50){
 			// All Mini-games, should start with Slot Machine or Zombotany
 				return true;
