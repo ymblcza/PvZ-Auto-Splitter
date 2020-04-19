@@ -15,12 +15,17 @@ state("popcapgame1"){                       // main process of Steam version
 
 state("PlantsVsZombies"){                    // main process of original version
 	int gamestate : 0x2a9ec0, 0x7fc;
-	int levelID: 0x2a9ec0, 0x7f8;              // 0 = adventure, 18 = Slot Machine, 51 = Vasebreaker, 1 = Survial: Day
-	int level: 0x2a9ec0, 0x82c, 0x24;          // current level in adventure mode, 1 = 1-1, 2 = 1-2, etc
+	int levelID: 0x2a9ec0, 0x7f8;              // 0 = Adventure, 16 = Zombotany, 51 = Vasebreaker, 1 = Survival: Day
+	int level: 0x2a9ec0, 0x82c, 0x24;          // current level in Adventure mode, 1 = 1-1, 2 = 1-2, etc
 	int timesadventurecompleted: 0x2a9ec0, 0x82c, 0x2c;
 	int sun: 0x2a9ec0, 0x768, 0x5560;
 	int endlessstreak: 0x2a9ec0, 0x768, 0x160, 0x6c;
-	int gametime: 0x2a9ec0, 0x768, 0x557c;
+	int gametime: 0x2a9ec0, 0x768, 0x556c;
+}
+
+init{
+	int[] startlevels = {1,2,3,4,5,6,7,8,9,10,16,18,51,60,70,13};
+	// 1,2,...,10 = Normal / All Survivals;   16,18 = All minigames;   51 = All puzzles;   60 / 70 / 13 = Vasebreaker / I, Zombie / Survival Endless
 }
 
 start{
@@ -30,49 +35,12 @@ start{
 			return true;
 		}
 	}
-	else{
-		if (current.levelID == 18 || current.levelID == 16){
-			if (current.gametime >=1 && current.gametime <= 4){
-			// All Mini-games, assuming starts with Slot Machine or Zombotany
-				return true;
-			}
-		}
-		else if (current.levelID == 51){
-			if (current.gametime >=1 && current.gametime <= 4){
-			// All Puzzles, assuming starts with Vasebreaker
-				return true;
-			}
-		}
-		else if (current.levelID >= 1 && current.levelID <= 10){
-			if (current.gametime >=1 && current.gametime <= 4){
-			// All Survivals and Normal Survivals
-				return true;
-			}
-		}
-		else if (current.levelID == 0){
-			if (current.level == 1 && current.gametime >=1 && current.gametime <= 4){
-			// NG+
-				return true;
-			}
-		}
-		else if (current.levelID == 60){
-			if (current.gametime >=1 && current.gametime <= 4){
-			// Vasebreaker Endless
-				return true;
-			}
-		}
-		else if (current.levelID == 70){
-			if (current.gametime >=1 && current.gametime <= 4){
-			// I, Zombie Endless
-				return true;
-			}
-		}
-		else if (current.levelID == 13){
-			if (current.gametime >=1 && current.gametime <= 4){
-			// Survival Endless
-				return true;
-			}
-		}
+	else if (current.gametime >=1 && current.gametime <= 4){
+		if (current.levelID in startlevels)
+			return true;
+		else if (current.levelID == 0 && current.level == 1)
+		// NG+
+			return true;
 	}
 }
 
