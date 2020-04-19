@@ -10,7 +10,7 @@ state("popcapgame1"){                       // main process of Steam version
 	int timesadventurecompleted: 0x331c50, 0x94c, 0x58;
 	int sun: 0x331c50, 0x868, 0x5578;
 	int endlessstreak: 0x331c50, 0x868, 0x178, 0x6c;
-	int gametime: 0x331c50, 0x868, 0x55854;
+	int gametime: 0x331c50, 0x868, 0x5584;
 }
 
 state("PlantsVsZombies"){                    // main process of original version
