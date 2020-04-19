@@ -36,7 +36,7 @@ start{
 		}
 	}
 	else if (current.gametime >=1 && current.gametime <= 4){
-		if (current.levelID in startlevels)
+		if (startlevels.IndexOf(current.levelID,1)!=-1)
 			return true;
 		else if (current.levelID == 0 && current.level == 1)
 		// NG+
