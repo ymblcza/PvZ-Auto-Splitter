@@ -24,8 +24,8 @@ state("PlantsVsZombies"){                    // main process of original version
 }
 
 init{
-	vars.startlevels = new List<int>{100,1,2,3,4,5,6,7,8,9,10,16,18,51,60,70,13};
-	// 1,2,...,10 = Normal / All Survivals;   16,18 = All minigames;   51 = All puzzles;   60 / 70 / 13 = Vasebreaker / I, Zombie / Survival Endless
+	vars.startlevels = new List<int>{100,1,2,3,4,5,6,7,8,9,10,16,18,51,55,59,61,69,60,70,13};
+	// 1,2,...,10 = Normal / All Survivals;   16,18 = All minigames;   51,55,59,61,69 = All puzzles;   60 / 70 / 13 = Vasebreaker / I, Zombie / Survival Endless
 }
 
 start{
