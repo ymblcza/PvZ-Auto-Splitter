@@ -24,32 +24,39 @@ state("PlantsVsZombies"){                    // main process of original version
 }
 
 init{
-	vars.category = -1;
-	vars.startlevels = new List<int>{100,1,2,3,4,5,6,7,8,9,10,16,18,51,55,59,61,69,60,70,13};
-	// 1,2,...,10 = Normal / All Survivals;   16,18 = All minigames;   51,55,59,61,69 = All puzzles;   60 / 70 / 13 = Vasebreaker / I, Zombie / Survival Endless
+	vars.isendless = false;
+	vars.startinglevels = new List<int>(){1,2,3,4,5,6,7,8,9,10,16,18,51,55,59,61,69};
+	vars.endlesslevels = new List<int>(){60,70,13};
+}
+
+startup{
+	settings.Add("splitinsurvival", true, "Split after every round in Survival Mode");
 }
 
 start{
 	if (current.timesadventurecompleted == 0){
 		if (current.levelID == 0 && current.level == 1 && current.gamestate == 3 && current.sun == 50){
-		// Any%
-			vars.category = 1;
+		// Any% or 100%
 			return true;
 		}
 	}
 	else if (current.gametime >=1 && current.gametime <= 20){
-		if (vars.startlevels.IndexOf(current.levelID, 1) != -1){
-			vars.category = 11;
+		if ( vars.startinglevels.Contains(current.levelID) ){
 			return true;
+		}
+		else if ( vars.endlesslevels.Contains(current.levelID) ){
+			vars.isendless = true;
+			return true;	
 		}
 		else if (current.levelID == 0 && current.level == 1){
 		// NG+
-			vars.category = 2;
 			return true;
 		}
 	}
 }
-
 split{
-	return current.level != old.level || current.levelID != 0 && (current.gamestate == 5 || current.gamestate == 7) && old.gamestate == 3 || current.endlessstreak != old.endlessstreak;
+	if (current.levelID == 0)
+		return current.level != old.level;
+	else
+		return (current.gamestate == 5 || current.gamestate == 7) && old.gamestate == 3 || (vars.isendless || settings["splitinsurvival"]) && current.endlessstreak != old.endlessstreak;
 }
