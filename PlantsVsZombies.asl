@@ -4,17 +4,18 @@
 // Timer should start at -8.80 seconds in NG+, at -5.00 in Endless categories, at -6.00 in other categories.
 
 state("popcapgame1", "1096_steam_en"){                               // main process of Steam version of PvZ
-	int gamestate : 0x331c50, 0x91c;
-	int levelID : 0x331c50, 0x918;
-	int level: 0x331c50, 0x94c, 0x50;
+	int gamestate : 0x331c50, 0x91c;                             // 3 = battling, 5 = unlocking new level, 7 = main menu
+	int levelID : 0x331c50, 0x918;                               // 0 = Adventure, 16 = Zombotany, 51 = Vasebreaker, 1 = Survival: Day
+	int level: 0x331c50, 0x94c, 0x50;                            // current level in Adventure mode, 1 = 1-1, 2 = 1-2, etc
 	int timesadventurecompleted: 0x331c50, 0x94c, 0x58;
 	int sun: 0x331c50, 0x868, 0x5578;
 	int endlessstreak: 0x331c50, 0x868, 0x178, 0x6c;
 	int gametime: 0x331c50, 0x868, 0x5584;
+	int currentwave: 0x331c50, 0x868, 0x5594;
 }
 
 state("PlantsVsZombies", "1051_en / 1065_en"){                       // main process of original version and fixed original version of PvZ
-	int gamestate : 0x2a9ec0, 0x7fc;
+	int gamestate : 0x2a9ec0, 0x7fc;                             // 3 = battling, 5 = unlocking new level, 7 = main menu
 	int levelID: 0x2a9ec0, 0x7f8;                                // 0 = Adventure, 16 = Zombotany, 51 = Vasebreaker, 1 = Survival: Day
 	int level: 0x2a9ec0, 0x82c, 0x24;                            // current level in Adventure mode, 1 = 1-1, 2 = 1-2, etc
 	int timesadventurecompleted: 0x2a9ec0, 0x82c, 0x2c;
@@ -25,20 +26,20 @@ state("PlantsVsZombies", "1051_en / 1065_en"){                       // main pro
 }
 
 state("PlantsVsZombies", "1073_en"){                                 // main process of GoTY-en version of PvZ
-	int gamestate : 0x329670, 0x91c;
+	int gamestate : 0x329670, 0x91c;                             // 3 = battling, 5 = unlocking new level, 7 = main menu
 	int levelID: 0x329670, 0x918;                                // 0 = Adventure, 16 = Zombotany, 51 = Vasebreaker, 1 = Survival: Day
 	int level: 0x329670, 0x94c, 0x4c;                            // current level in Adventure mode, 1 = 1-1, 2 = 1-2, etc
 	int timesadventurecompleted: 0x329670, 0x94c, 0x54;
 	int sun: 0x329670, 0x868, 0x5578;
 	int endlessstreak: 0x329670, 0x868, 0x178, 0x6c;
 	int gametime: 0x329670, 0x868, 0x5584;
+	int currentwave: 0x329670, 0x868, 0x5594;
 }
 
 init{
-	vars.isendless = false;
+	vars.isendless = false;                                      // if the current running catrgory is endless
 	vars.puzzlesstartinglevels = new List<int>(){51,55,59,61,69};
 	vars.endlesslevels = new List<int>(){60,70,13};
-	print(modules.First().ModuleMemorySize.ToString());
 	if (modules.First().ModuleMemorySize >= 4000000)
 		version = "1073_en";
 	else if (modules.First().ModuleMemorySize >= 3000000)
@@ -74,6 +75,7 @@ start{
 		}
 	}
 }
+
 split{
 	// split every level in Adventure mode
 	if (current.levelID == 0)
