@@ -37,9 +37,14 @@ state("PlantsVsZombies", "1073_en"){                                 // main pro
 }
 
 init{
-	vars.isendless = false;                                      // if the current running catrgory is endless
+	vars.isendless = false;                                      // if the current running category is endless
+	vars.split_gamestate = false;                                // if split when gamestate changes
+	vars.split_currentwave = false;                              // if split when currentwave is a times of 10
+	vars.split_endlessstreak = false;                            // if split when streak number changes
+	
 	vars.puzzlesstartinglevels = new List<int>(){51,55,59,61,69};
 	vars.endlesslevels = new List<int>(){60,70,13};
+	
 	if (modules.First().ModuleMemorySize >= 4000000)
 		version = "1073_en";
 	else if (modules.First().ModuleMemorySize >= 3000000)
@@ -82,16 +87,16 @@ split{
 		return current.level != old.level;
 
 	else {
-		// split if return to main menu
-		if (old.gamestate == 3)
-			return current.gamestate == 5 || current.gamestate == 7;
+		// split if returns to main menu
+		vars.split_gamestate = (old.gamestate == 3 && (current.gamestate == 5 || current.gamestate == 7));
 
-		// split every flag
-		if (settings["splitinil"])
-			return current.gamestate == 3 && current.currentwave % 10 == 0 && old.currentwave % 10 != 0;
+		// split every flag (aka, 10 waves)
+		vars.split_currentwave = settings["splitinil"] && (current.gamestate == 3 && current.currentwave % 10 == 0 && old.currentwave % 10 != 0);
 
-		// split every round during long levels (endlesses, survivals, last stand)
-		if (current.endlessstreak != old.endlessstreak)
-			return  vars.isendless || current.levelID <= 10 && settings["splitinsurvival"] || current.levelID == 31 && settings["splitinlaststand"];
+		// split every round during long levels (Endlesses, Survivals, Last Stand)
+		vars.split_endlessstreak = current.endlessstreak != old.endlessstreak && (vars.isendless || current.levelID <= 10 && settings["splitinsurvival"] 
+					|| current.levelID == 31 && settings["splitinlaststand"]);
+
+		return vars.split_gamestate || vars.split_currentwave || vars.split_endlessstreak;
 	}
 }
