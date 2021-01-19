@@ -81,15 +81,17 @@ split{
 	if (current.levelID == 0)
 		return current.level != old.level;
 
-	// split if return to main menu
-	else if (old.gamestate == 3)
-		return current.gamestate == 5 || current.gamestate == 7;
+	else {
+		// split if return to main menu
+		if (old.gamestate == 3)
+			return current.gamestate == 5 || current.gamestate == 7;
 
-	// split every flag (aka, 10 waves)
-	else if (settings["splitinil"])
-		return current.gamestate == 3 && current.currentwave % 10 == 0 && old.currentwave % 10 != 0;
+		// split every flag
+		if (settings["splitinil"])
+			return current.gamestate == 3 && current.currentwave % 10 == 0 && old.currentwave % 10 != 0;
 
-	// split every round during long levels (Endlesses, Survivals, Last Stand)
-	else if (current.endlessstreak != old.endlessstreak)
-		return  vars.isendless || current.levelID <= 10 && settings["splitinsurvival"] || current.levelID == 31 && settings["splitinlaststand"];
+		// split every round during long levels (endlesses, survivals, last stand)
+		if (current.endlessstreak != old.endlessstreak)
+			return  vars.isendless || current.levelID <= 10 && settings["splitinsurvival"] || current.levelID == 31 && settings["splitinlaststand"];
+	}
 }
