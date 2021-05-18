@@ -14,7 +14,7 @@ state("popcapgame1", "1096_steam_en"){                               // main pro
 	int currentwave: 0x331c50, 0x868, 0x5594;
 }
 
-state("PlantsVsZombies", "1051_en / 1065_en"){                       // main process of original version and fixed original version of PvZ
+state("popcapgame1", "1051_en / 1065_en"){                           // main process of original version and fixed original version of PvZ
 	int gamestate : 0x2a9ec0, 0x7fc;                             // 3 = battling, 5 = unlocking new level, 7 = main menu
 	int levelID: 0x2a9ec0, 0x7f8;                                // 0 = Adventure, 16 = Zombotany, 51 = Vasebreaker, 1 = Survival: Day
 	int level: 0x2a9ec0, 0x82c, 0x24;                            // current level in Adventure mode, 1 = 1-1, 2 = 1-2, etc
@@ -25,7 +25,29 @@ state("PlantsVsZombies", "1051_en / 1065_en"){                       // main pro
 	int currentwave: 0x2a9ec0, 0x768, 0x557c;
 }
 
-state("PlantsVsZombies", "1073_en"){                                 // main process of GoTY-en version of PvZ
+state("popcapgame1", "1073_en"){                                 // main process of GoTY-en version of PvZ
+	int gamestate : 0x329670, 0x91c;                             // 3 = battling, 5 = unlocking new level, 7 = main menu
+	int levelID: 0x329670, 0x918;                                // 0 = Adventure, 16 = Zombotany, 51 = Vasebreaker, 1 = Survival: Day
+	int level: 0x329670, 0x94c, 0x4c;                            // current level in Adventure mode, 1 = 1-1, 2 = 1-2, etc
+	int timesadventurecompleted: 0x329670, 0x94c, 0x54;
+	int sun: 0x329670, 0x868, 0x5578;
+	int endlessstreak: 0x329670, 0x868, 0x178, 0x6c;
+	int gametime: 0x329670, 0x868, 0x5584;
+	int currentwave: 0x329670, 0x868, 0x5594;
+}
+
+state("PlantsVsZombies", "1051_en / 1065_en"){                       // another main process of original version and fixed original version of PvZ
+	int gamestate : 0x2a9ec0, 0x7fc;                             // 3 = battling, 5 = unlocking new level, 7 = main menu
+	int levelID: 0x2a9ec0, 0x7f8;                                // 0 = Adventure, 16 = Zombotany, 51 = Vasebreaker, 1 = Survival: Day
+	int level: 0x2a9ec0, 0x82c, 0x24;                            // current level in Adventure mode, 1 = 1-1, 2 = 1-2, etc
+	int timesadventurecompleted: 0x2a9ec0, 0x82c, 0x2c;
+	int sun: 0x2a9ec0, 0x768, 0x5560;
+	int endlessstreak: 0x2a9ec0, 0x768, 0x160, 0x6c;
+	int gametime: 0x2a9ec0, 0x768, 0x556c;
+	int currentwave: 0x2a9ec0, 0x768, 0x557c;
+}
+
+state("PlantsVsZombies", "1073_en"){                                 // another main process of GoTY-en version of PvZ
 	int gamestate : 0x329670, 0x91c;                             // 3 = battling, 5 = unlocking new level, 7 = main menu
 	int levelID: 0x329670, 0x918;                                // 0 = Adventure, 16 = Zombotany, 51 = Vasebreaker, 1 = Survival: Day
 	int level: 0x329670, 0x94c, 0x4c;                            // current level in Adventure mode, 1 = 1-1, 2 = 1-2, etc
@@ -61,7 +83,7 @@ startup{
 
 start{
 	if (current.timesadventurecompleted == 0){
-		if (current.levelID == 0 && current.level == 1 && current.gamestate == 3 && current.sun == 50){
+		if (current.levelID == 0 && current.level == 1 && current.sun == 50 && old.sun == 150){
 		// Any% or 100%
 			return true;
 		}
