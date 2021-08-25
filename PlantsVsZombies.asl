@@ -73,10 +73,11 @@ init{
 
 startup{
 	vars.puzzlename = new List<string>{"Vasebreaker","To the Left","Third Vase","Chain Reaction","M is for Metal","Scary Potter","Hokey Pokey","Another Chain Reaction","Ace of Vase","Vasebreaker Endless","I, Zombie","I, Zombie Too","Can You Dig It?","Totally Nuts","Dead Zepplin","Me Smash","Zomboogie","Three Hit Wonder","All your brainz","I, Zombie Endless"};
-	settings.Add("sv", false, "Split every round in Survivals");
-	settings.Add("ls", false, "Split every round in Last Stand");
+	settings.Add("sv", false, "Split every round on Survivals");
+	settings.Add("ls", false, "Split every round on Last Stand");
 	settings.Add("fl", false, "Split every flag");
-	settings.Add("ps",true,"Start Autosplitter on Puzzles (MUST BE CHECKED)");
+	settings.Add("wave",false,"Split every wave. For practice only, run will be banned if checked");
+	settings.Add("ps",true,"Start Autosplitter on Puzzles (must be checked)");
 	for (int i = 51; i<=59; ++i)
 		settings.Add("ps"+i.ToString(),false,vars.puzzlename[i-51],"ps");
 	for (int i = 61; i<=69; ++i)
@@ -113,7 +114,6 @@ split{
 	// split every level in Adventure mode
 	if (current.levelID == 0)
 		return current.level != old.level;
-
 	else {
 		// split if returning to main menu
 		if (old.gamestate == 3 && (current.gamestate == 5 || current.gamestate == 7) )
@@ -122,7 +122,8 @@ split{
 		// split every flag (aka, every 10 waves)
 		if (settings["fl"] && (current.gamestate == 3 && current.currentwave % 10 == 0 && old.currentwave % 10 != 0) )
 			return true;
-
+		if (settings["wave"] && (current.gamestate == 3 && current.currentwave != old.currentwave) )
+			return true;
 		// split every round in Survival / Vasebreaker / I,Zombie Endless, Survivals, Last Stand)
 		if (current.streak != old.streak && (vars.isendless || current.levelID <= 10 && settings["sv"] || current.levelID == 31 && settings["ls"]) )
 			return true;
