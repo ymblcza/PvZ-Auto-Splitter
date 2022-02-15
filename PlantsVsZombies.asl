@@ -88,7 +88,7 @@ startup{
 	settings.Add("laststand", false, "Split every round on Last Stand");
 	settings.Add("flag", false, "Split every flag");
 	settings.Add("wave",false,"Split every wave. For practice only, run will be banned if checked");
-	settings.Add("seed", false, "Split after seed selection. For practice only, run will be banned if checked");
+	settings.Add("seed", false, "Split after seed selection");
 	settings.Add("puzzles_start",true,"Start Autosplitter on Puzzles (must be checked)");
 	for (int i = 51; i<=59; ++i)
 		settings.Add("puzzles_start"+i.ToString(),false,vars.name_puzzles[i-51],"puzzles_start");
