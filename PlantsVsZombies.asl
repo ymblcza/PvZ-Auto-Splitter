@@ -68,7 +68,6 @@ state("PlantsVsZombies", "1073_en"){                                 // GoTY-en
 
 init{
 	vars.is_endless = false;
-	vars.level_endless = new List<int>(){60,70,13};
 	vars.level_not_start = new List<int>(){42,43};
 	vars.level_has_seed_selection = new List<int>(){0,1,2,3,4,5,6,7,8,9,10,13,16,22,28,29,31,32,34,36,37,38,39,40,41,44,45};
 	
@@ -83,17 +82,18 @@ init{
 }
 
 startup{
-	vars.name_puzzles = new List<string>{"Vasebreaker","To the Left","Third Vase","Chain Reaction","M is for Metal","Scary Potter","Hokey Pokey","Another Chain Reaction","Ace of Vase","Vasebreaker Endless","I, Zombie","I, Zombie Too","Can You Dig It?","Totally Nuts","Dead Zepplin","Me Smash","Zomboogie","Three Hit Wonder","All your brainz","I, Zombie Endless"};
-	settings.Add("survival", false, "Split every round on Survivals");
-	settings.Add("laststand", false, "Split every round on Last Stand");
-	settings.Add("flag", false, "Split every flag");
+	vars.name_puzzle = new List<string>{"Vasebreaker","To the Left","Third Vase","Chain Reaction","M is for Metal","Scary Potter","Hokey Pokey","Another Chain Reaction","Ace of Vase","Vasebreaker Endless","I, Zombie","I, Zombie Too","Can You Dig It?","Totally Nuts","Dead Zepplin","Me Smash","Zomboogie","Three Hit Wonder","All your brainz","I, Zombie Endless"};
+	settings.Add("puzzle_start",true,"Start Autosplitter on Puzzles (must be checked)");
+	settings.Add("seed", false,"Split after seed selection");
 	settings.Add("wave",false,"Split every wave. For practice only, run will be banned if checked");
-	settings.Add("seed", false, "Split after seed selection");
-	settings.Add("puzzles_start",true,"Start Autosplitter on Puzzles (must be checked)");
+	settings.Add("flag", false, "Split every flag");
+	settings.Add("laststand_streak", false, "Split every round on Last Stand");
+	settings.Add("puzzle_streak",true,"Split every round on I,Zombie / Vasebreaker Endless");
+	settings.Add("survival_streak", false, "Split every round on Survivals");
 	for (int i = 51; i<=59; ++i)
-		settings.Add("puzzles_start"+i.ToString(),false,vars.name_puzzles[i-51],"puzzles_start");
+		settings.Add("puzzle_start"+i.ToString(),false,vars.name_puzzle[i-51],"puzzle_start");
 	for (int i = 61; i<=69; ++i)
-		settings.Add("puzzles_start"+i.ToString(),false,vars.name_puzzles[i-51],"puzzles_start");
+		settings.Add("puzzle_start"+i.ToString(),false,vars.name_puzzle[i-51],"puzzle_start");
 }
 
 start{
@@ -104,8 +104,7 @@ start{
 		}
 	}
 	else if (current.rawGameClock >=1 && current.rawGameClock <= 10){
-		if ( vars.level_endless.Contains(current.levelID) ){
-			vars.is_endless = true;
+		if ( current.levelID == 13 || current.levelID == 60 || current.levelID == 70){
 			return true;
 		}
 		else if (current.levelID == 0 && current.advenlevel == 1){
@@ -113,12 +112,13 @@ start{
 			return true;
 		}
 		else if ( current.levelID<=48 && current.levelID>=1 && !vars.level_not_start.Contains(current.levelID)){
+		// Mini-Game
 			return true;
 		}
 		for (int i =51; i<=59; ++i)
-			if (settings["puzzles_start"+i.ToString()] && current.levelID==i || settings["puzzles_start"+(i+10).ToString()] && current.levelID==i+10)
+			if (settings["puzzle_start"+i.ToString()] && current.levelID==i || settings["puzzle_start"+(i+10).ToString()] && current.levelID==i+10)
 				return true;
-		// Puzzles
+		// Puzzle
 	}
 }
 
@@ -127,7 +127,7 @@ split{
 	if (current.levelID == 0)
 		return current.advenlevel != old.advenlevel;
 	else {
-		// split if returned to main menu
+		// split when returing to main menu
 		if (old.UI == 3 && (current.UI == 5 || current.UI == 7) )
 			return true;
 
@@ -143,8 +143,8 @@ split{
 		if (settings["seed"] && (current.UI == 3 && old.netGameClock == 0 && current.netGameClock > 0) && vars.level_has_seed_selection.Contains(current.levelID) )
 			return true;
 
-		// split every round on Survival / Vasebreaker / I,Zombie Endless, Survivals, Last Stand)
-		if (current.streak != old.streak && (vars.is_endless || current.levelID <= 10 && settings["survival"] || current.levelID == 31 && settings["laststand"]) )
+		// split every round on Vasebreaker / I,Zombie Endless, Survivals, Last Stand)
+		if (current.streak != old.streak && (current.levelID >= 51 && settings["puzzle_streak"] || current.levelID <= 15 && settings["survival_streak"] || current.levelID == 31 && settings["laststand_streak"]) )
 			return true;
 	}
 }
