@@ -124,8 +124,14 @@ start{
 
 split{
 	// split every advenlevel in Adventure mode
-	if (current.levelID == 0)
+	if (current.levelID == 0) {
+		
+		// split every wave
+		if (settings["wave"] && (current.UI == 3 && current.currentWave != old.currentWave) )
+			return true;
+
 		return current.advenlevel != old.advenlevel;
+	}
 	else {
 		// split when returing to main menu
 		if (old.UI == 3 && (current.UI == 5 || current.UI == 7) )
